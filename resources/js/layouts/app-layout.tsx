@@ -26,6 +26,7 @@ import { useKeyboardShortcuts } from '@/hooks/use-keyboard-shortcuts';
 import { useNavOpen } from '@/hooks/use-nav-open';
 import { useTabSlide } from '@/hooks/use-tab-slide';
 import { signIn } from '@/lib/auth';
+import { backgroundPollOptions } from '@/lib/background-poll';
 import { cn } from '@/lib/utils';
 import type { AppLayoutProps } from '@/types';
 
@@ -79,7 +80,7 @@ export default function AppLayout({ children }: AppLayoutProps) {
                 )}
                 <div
                     data-nav-rail
-                    className="sticky top-0 hidden h-svh w-20 shrink-0 md:block lg:w-(--sidebar-width)"
+                    className="sticky top-[var(--launch-banner-height,0px)] hidden h-[calc(100svh-var(--launch-banner-height,0px))] w-20 shrink-0 md:block lg:w-(--sidebar-width)"
                 >
                     <AppNav onSearch={openSearch} onCompose={compose} />
                 </div>
@@ -157,7 +158,7 @@ export default function AppLayout({ children }: AppLayoutProps) {
 function NotificationCountPolling({ onNotFound }: { onNotFound: () => void }) {
     usePoll(
         30_000,
-        {
+        backgroundPollOptions({
             only: ['auth.unreadNotificationsCount', 'auth.unreadMessagesCount'],
             onHttpException: (response) => {
                 if (response.status !== 404) {
@@ -168,7 +169,7 @@ function NotificationCountPolling({ onNotFound }: { onNotFound: () => void }) {
 
                 return false;
             },
-        },
+        }),
         { mode: 'rest', background: 'pause' },
     );
 
