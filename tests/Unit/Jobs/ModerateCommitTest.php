@@ -390,6 +390,7 @@ it('only skips ai review for queued commits with daemon public xp', function (bo
     } else {
         $user->starredCommits()->attach(Commit::factory()->count(2)->create()->modelKeys());
     }
+
     Commit::factory()->for($user)->rejected()->count(5)->create();
     $commit = Commit::factory()->for($user)->pending()->create();
     followersOf($user, 10);
